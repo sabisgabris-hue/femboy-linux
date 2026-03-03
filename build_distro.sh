@@ -6,17 +6,18 @@ set -e
 mkdir -p /tmp/femboy_factory && cd /tmp/femboy_factory
 sudo lb clean --purge || true
 
-# CONFIGURAÇÃO ULTRA SIMPLIFICADA
-# Tiramos as opções que deram erro no log
+# CONFIGURAÇÃO "MODO AVIÃO" (Sem travas de repositório)
 sudo lb config \
     --mode debian \
     --distribution bookworm \
     --archive-areas "main contrib non-free non-free-firmware" \
+    --security false \
+    --updates false \
     --bootstrap debootstrap
 
 # Inicia o build real
 sudo lb build
 
 mkdir -p $GITHUB_WORKSPACE/output
-sudo mv *.iso $GITHUB_WORKSPACE/output/ 2>/dev/null || echo "ISO ainda não gerada"
+sudo mv *.iso $GITHUB_WORKSPACE/output/ 2>/dev/null || echo "ISO não encontrada"
 ​<!-- end list -->
