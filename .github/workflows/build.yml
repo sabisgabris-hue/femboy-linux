@@ -6,29 +6,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Install Dependencies
+
+      - name: Install Tools
         run: |
-          sudo apt update
-          sudo apt install -y live-build debootstrap squashfs-tools xorriso
-          
-      - name: Cook the ISO
+          sudo apt-get update
+          sudo apt-get install -y live-build debootstrap xorriso squashfs-tools
+
+      - name: Build ISO
         run: |
-          # Criar pasta limpa e configurar
-          mkdir -p workspace && cd workspace
-          sudo lb config \
-            --debian-installer live \
-            --archive-areas "main contrib non-free" \
-            --mode debian \
-            --system live \
-            --non-interactive
+          # Criar uma pasta limpa fora da raiz do checkout
+          mkdir -p $HOME/build_area
+          cd $HOME/build_area
           
-          # Rodar o build com permissão de root
+          # Configuração mínima e robusta
+          sudo lb config --debian-installer live --archive-areas "main contrib non-free" --non-interactive
+          
+          # Rodar o build de verdade
           sudo lb build
           
+          # Mover a ISO pronta para onde o GitHub consegue ver
+          mkdir -p $GITHUB_WORKSPACE/output
+          sudo mv *.iso $GITHUB_WORKSPACE/output/ 2>/dev/null || echo "ISO não encontrada"
+
       - name: Upload ISO
         uses: actions/upload-artifact@v4
         with:
           name: Femboy-Linux-ISO
-          path: workspace/*.iso
+          path: output/*.iso
 
