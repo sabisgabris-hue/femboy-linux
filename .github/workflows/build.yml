@@ -4,29 +4,14 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Usamos uma imagem que já vem com as ferramentas de build
-    container:
-      image: debian:bookworm
-      options: --privileged
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Build Tools
+      - name: Rodar Script de Build
         run: |
-          apt-get update
-          apt-get install -y live-build debootstrap xorriso squashfs-tools cpio
-
-      - name: Cook the ISO
-        run: |
-          mkdir -p /build && cd /build
-          # Comando simplificado para garantir estabilidade
-          lb config --debian-installer live --archive-areas "main contrib non-free" --non-interactive
-          lb build
-          
-          # Move a ISO para o lugar certo
-          mkdir -p $GITHUB_WORKSPACE/output
-          mv *.iso $GITHUB_WORKSPACE/output/ 2>/dev/null || echo "ISO not found"
+          # Dar permissão e rodar como root total no servidor
+          chmod +x build_distro.sh
+          sudo ./build_distro.sh
 
       - name: Upload ISO
         uses: actions/upload-artifact@v4
