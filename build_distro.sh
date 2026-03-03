@@ -4,24 +4,19 @@ sudo apt-get install -y live-build debootstrap xorriso squashfs-tools cpio --fix
 
 set -e
 mkdir -p /tmp/femboy_factory && cd /tmp/femboy_factory
+
+# LIMPEZA TOTAL antes de começar
 sudo lb clean --purge || true
 
-# CONFIGURAÇÃO "BLINDADA"
-# Usamos o mirror direto para ele não inventar caminhos errados
+# CONFIGURAÇÃO SIMPLIFICADA (Sem mirrors manuais aqui para evitar duplicidade)
 sudo lb config \
     --mode debian \
     --distribution bookworm \
     --archive-areas "main contrib non-free non-free-firmware" \
-    --parent-mirror-binary "http://deb.debian.org/debian/" \
-    --parent-mirror-bootstrap "http://deb.debian.org/debian/" \
-    --parent-mirror-chroot "http://deb.debian.org/debian/" \
     --bootstrap debootstrap
 
-# AQUI ESTÁ O TRUQUE: 
-# Vamos desativar o repositório de segurança na marra antes do build
-echo "deb http://deb.debian.org/debian bookworm main" | sudo tee config/archives/debian.list.chroot
-
-# Inicia o build real
+# RODAR O BUILD DIRETAMENTE
+# O live-build vai tentar configurar os repositórios sozinho
 sudo lb build
 
 mkdir -p $GITHUB_WORKSPACE/output
