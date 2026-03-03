@@ -6,11 +6,15 @@ set -e
 mkdir -p /tmp/femboy_factory && cd /tmp/femboy_factory
 sudo lb clean --purge || true
 
-# CONFIGURAÇÃO FORÇANDO DEBIAN BOOKWORM
+# CONFIGURAÇÃO COM REPOSITÓRIOS CORRIGIDOS
 sudo lb config \
     --mode debian \
     --distribution bookworm \
-    --archive-areas "main contrib non-free" \
+    --archive-areas "main contrib non-free non-free-firmware" \
+    --security true \
+    --updates true \
+    --mirror-bootstrap "http://deb.debian.org/debian/" \
+    --mirror-security "http://deb.debian.org/debian-security/" \
     --bootstrap debootstrap
 
 # Inicia o build real
@@ -18,4 +22,4 @@ sudo lb build
 
 mkdir -p $GITHUB_WORKSPACE/output
 sudo mv *.iso $GITHUB_WORKSPACE/output/ 2>/dev/null || echo "ISO ainda não gerada"
-
+​<!-- end list -->
