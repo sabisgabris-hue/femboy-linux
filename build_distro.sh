@@ -6,15 +6,12 @@ set -e
 mkdir -p /tmp/femboy_factory && cd /tmp/femboy_factory
 sudo lb clean --purge || true
 
-# CONFIGURAÇÃO COM REPOSITÓRIOS CORRIGIDOS
+# CONFIGURAÇÃO ULTRA SIMPLIFICADA
+# Tiramos as opções que deram erro no log
 sudo lb config \
     --mode debian \
     --distribution bookworm \
     --archive-areas "main contrib non-free non-free-firmware" \
-    --security true \
-    --updates true \
-    --mirror-bootstrap "http://deb.debian.org/debian/" \
-    --mirror-security "http://deb.debian.org/debian-security/" \
     --bootstrap debootstrap
 
 # Inicia o build real
