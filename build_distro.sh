@@ -1,28 +1,23 @@
 #!/bin/bash
 set -e
 
-# Instalar o básico sem perguntas
+# Instalar tudo de uma vez
 sudo apt-get update
-sudo apt-get install -y live-build debootstrap xorriso squashfs-tools
+sudo apt-get install -y live-build debootstrap xorriso squashfs-tools cpion
 
-# LIMPEZA TOTAL: Remover qualquer rastro anterior
+# Mudar para uma pasta onde o Root tem poder total
+cd /tmp
 sudo lb clean --purge || true
 
-# Criar uma pasta única para esse build
-BUILD_DIR="$HOME/femboy_build_$(date +%s)"
-mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR"
+# Configuração minimalista
+sudo lb config --debian-installer live \
+               --archive-areas "main contrib non-free" \
+               --non-interactive
 
-# Configurar com o básico absoluto para não dar erro
-lb config --debian-installer live \
-          --archive-areas "main contrib non-free" \
-          --non-interactive \
-          --build-with-chroot true
-
-# O GRANDE COMANDO (Rodar como root)
+# RODAR O BUILD (O coração da Femboy Linux)
 sudo lb build
 
-# Se chegar aqui, a ISO existe! Vamos mover para o output
+# Mover o resultado de volta para o GitHub ver
 mkdir -p $GITHUB_WORKSPACE/output
 sudo mv *.iso $GITHUB_WORKSPACE/output/ 2>/dev/null || echo "ISO não encontrada"
-
+​<!-- end list -->
