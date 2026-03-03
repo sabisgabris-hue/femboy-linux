@@ -1,0 +1,27 @@
+name: Build Femboy Linux ISO
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Environment
+        run: |
+          sudo apt update
+          sudo apt install live-build -y
+          
+      - name: Cook the ISO
+        run: |
+          mkdir -p build && cd build
+          # O segredo é rodar o config e o build com permissão total e sem travar
+          sudo lb config --debian-installer live --archive-areas "main contrib non-free" --non-interactive
+          sudo lb build
+          
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: Femboy-Linux-ISO
+          path: build/*.iso
+
