@@ -1,0 +1,12 @@
+[Configuration]
+ColorPalette=#1e1e2e;#f38ba8;#a6e3a1;#f9e2af;#89b4fa;#f5c2e7;#94e2d5;#bac2de;#585b70;#f38ba8;#a6e3a1;#f9e2af;#89b4fa;#f5c2e7;#94e2d5;#a6adc8
+ColorBackground=#1e1e2e
+ColorForeground=#cdd6f4
+ColorCursor=#f5e0dc
+FontName=Monospace 12
+# Aqui está a transparência (0.80 = 80% opaco)
+BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
+BackgroundDarkness=0.80
+# Bordas e barras (Rosa)
+TabActivityColor=#f5c2e7
+​<!-- end list -->
