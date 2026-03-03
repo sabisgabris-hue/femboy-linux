@@ -6,18 +6,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Build Tools
+      
+      - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install live-build -y
+          sudo apt install -y live-build debootstrap squashfs-tools xorriso
+          
       - name: Cook the ISO
         run: |
-          mkdir build && cd build
-          sudo lb config --debian-installer live --archive-areas "main contrib non-free"
+          # Criar pasta limpa e configurar
+          mkdir -p workspace && cd workspace
+          sudo lb config \
+            --debian-installer live \
+            --archive-areas "main contrib non-free" \
+            --mode debian \
+            --system live \
+            --non-interactive
+          
+          # Rodar o build com permissão de root
           sudo lb build
+          
       - name: Upload ISO
         uses: actions/upload-artifact@v4
         with:
           name: Femboy-Linux-ISO
-          path: build/*.iso
+          path: workspace/*.iso
 
