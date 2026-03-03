@@ -4,7 +4,7 @@
 for i in {1..3}; do sudo apt-get update && break || sleep 5; done
 
 # Instalar ignorando erros pequenos de pacotes
-sudo apt-get install -y live-build debootstrap xorriso squashfs-tools cpion --fix-missing
+sudo apt-get install -y live-build debootstrap xorriso squashfs-tools cpio --fix-missing
 
 # Ativar o modo "parar se errar" apenas para o build da ISO
 set -e
